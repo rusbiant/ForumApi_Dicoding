@@ -26,10 +26,10 @@ const createServer = async (container) => {
       sub: false,
       maxAgeSec: process.env.ACCESS_TOKEN_AGE,
     },
-    validate: (artifacts) => ({
+    validate: (arfifacts) => ({
       isValid: true,
       credentials: {
-        id: artifacts.decoded.payload.id,
+        id: arfifacts.decoded.payload.id,
       },
     }),
   });
@@ -46,7 +46,7 @@ const createServer = async (container) => {
     {
       plugin: threads,
       options: { container },
-    },
+    }
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -77,7 +77,6 @@ const createServer = async (container) => {
         status: 'error',
         message: 'terjadi kegagalan pada server kami',
       });
-      console.error(error);
       newResponse.code(500);
       return newResponse;
     }
