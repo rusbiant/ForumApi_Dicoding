@@ -10,16 +10,16 @@ const ThreadsTableTestHelper = {
   }) {
     const query = {
       text: 'INSERT INTO threads VALUES($1, $2, $3, $4)',
-      VALUES: [id, title, body, owner],
+      values: [id, title, body, owner],
     };
 
     await pool.query(query);
   },
 
-  async findThreadById(id) {
+  async findThreadById(threadId) {
     const query = {
       text: 'SELECT * FROM threads WHERE id = $1',
-      values: [id],
+      values: [threadId],
     }
 
     const result = await pool.query(query);
