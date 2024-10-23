@@ -1,7 +1,7 @@
 const AddedThread = require('../AddedThread');
 
 describe('an AddedThread entities', () => {
-  it('it should throw error when payload did not contain needed property', () => {
+  it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
       title: 'thread title',
@@ -11,12 +11,12 @@ describe('an AddedThread entities', () => {
     expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
-  it('it should throw error when payload did not meet data type specifications', () => {
+  it('should throw error when payload did not meet data type specifications', () => {
     // Arrange
     const payload = {
       id: 123,
       title: true,
-      owner: 'user-123',
+      owner: 2011,
     };
 
     // Action and Assert
@@ -26,17 +26,17 @@ describe('an AddedThread entities', () => {
   it('should create AddedThread object correctly', () => {
     // Arrange
     const payload = {
-      id: 'thread-123',
-      title: 'thread title',
+      id: 'thread-id',
+      title: 'thread-title',
       owner: 'user-123',
     };
 
     // Action
-    const addedThread = new AddedThread(payload);
+    const { id, title, owner } = new AddedThread(payload);
 
     // Assert
-    expect(addedThread.id).toStrictEqual(payload.id);
-    expect(addedThread.title).toStrictEqual(payload.title);
-    expect(addedThread.owner).toStrictEqual(payload.owner);
+    expect(id).toStrictEqual(payload.id);
+    expect(title).toStrictEqual(payload.title);
+    expect(owner).toStrictEqual(payload.owner);
   });
 });

@@ -17,11 +17,12 @@ DomainErrorTranslator._directories = {
   'REFRESH_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('refresh token harus string'),
   'DELETE_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN': new InvariantError('harus mengirimkan token refresh'),
   'DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('refresh token harus string'),
-  'ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat thread baru karena property yang dibutuhkan tidak ada'),
-  'ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATIONS': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
-  'ADD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat comment baru karena property yang dibutuhkan tidak ada'),
-  'ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATIONS': new InvariantError('tidak dapat membuat comment baru karena tipe data tidak sesuai'),
-
+  'ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat menambahkan thread baru karena properti yang dibutuhkan tidak ada'),
+  'ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATIONS': new InvariantError('tidak dapat menambahkan thread baru karena tipe data tidak sesuai'),
+  'GET_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat mengambil thread karena properti yang dibutuhkan tidak ada'),
+  'GET_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATIONS': new InvariantError('tidak dapat mengambil thread karena tipe data tidak sesuai'),
+  'ADD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat menambahkan comment baru karena properti yang dibutuhkan tidak ada'),
+  'ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATIONS': new InvariantError('tidak dapat menambahkan comment baru karena tipe data tidak sesuai'),
 };
 
 module.exports = DomainErrorTranslator;

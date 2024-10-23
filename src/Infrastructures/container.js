@@ -23,11 +23,12 @@ const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgre
 // use case
 const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager');
 const JwtTokenManager = require('./security/JwtTokenManager');
+const AddUserUseCase = require('../Applications/use_case/users/AddUserUseCase');
 const LoginUserUseCase = require('../Applications/use_case/users/LoginUserUseCase');
 const LogoutUserUseCase = require('../Applications/use_case/users/LogoutUserUseCase');
-const RefreshAuthenticationUseCase = require('../Applications/use_case/authentications/RefreshAuthenticationUseCase');
-const AddUserUseCase = require('../Applications/use_case/users/AddUserUseCase');
+const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
 const AddThreadUseCase = require('../Applications/use_case/threads/AddThreadUseCase');
+const GetThreadUseCase = require('../Applications/use_case/threads/GetThreadUseCase');
 const AddCommentUseCase = require('../Applications/use_case/comments/AddCommentUseCase');
 
 // creating container
@@ -192,6 +193,23 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetThreadUseCase.name,
+    Class: GetThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
+        },
         {
           name: 'threadRepository',
           internal: ThreadRepository.name,

@@ -11,7 +11,9 @@ const ServerTestHelper = {
     password = 'secret',
     fullname = 'Dicoding Indonesia',
   }) {
-    const userPayload = { id, username, password, fullname };
+    const userPayload = {
+      id, username, password, fullname,
+    };
     await UsersTableTestHelper.addUser(userPayload);
     const accessToken = Jwt.token.generate(userPayload, process.env.ACCESS_TOKEN_KEY);
     const refreshToken = Jwt.token.generate(userPayload, process.env.REFRESH_TOKEN_KEY);
@@ -23,7 +25,7 @@ const ServerTestHelper = {
   async cleanTable() {
     AuthenticationsTableTestHelper.cleanTable();
     UsersTableTestHelper.cleanTable();
-  },   
+  },
 };
 
 module.exports = ServerTestHelper;

@@ -1,5 +1,5 @@
 const LoginUserUseCase = require('../../../../Applications/use_case/users/LoginUserUseCase');
-const RefreshAuthenticationUseCase = require('../../../../Applications/use_case/authentications/RefreshAuthenticationUseCase');
+const RefreshAuthenticationUseCase = require('../../../../Applications/use_case/RefreshAuthenticationUseCase');
 const LogoutUserUseCase = require('../../../../Applications/use_case/users/LogoutUserUseCase');
 
 class AuthenticationsHandler {
