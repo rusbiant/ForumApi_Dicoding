@@ -5,6 +5,8 @@ const pool = require('../../database/postgres/pool');
 const AddComment = require('../../../Domains/comments/entities/AddComment');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('a CommentRepositoryPostgres', () => {
   beforeEach(async () => {
@@ -189,5 +191,115 @@ describe('a CommentRepositoryPostgres', () => {
   });
 
   describe('verifyCommentOwner function', () => {
+    it('should throw NotFoundError when comment not available', () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      return expect(commentRepositoryPostgres.verifyCommentOwner('comment-123'))
+        .rejects.toThrowError(NotFoundError);
+    });
+
+    it('should throw AuthorizationError when user unAuthorized', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-456'))
+        .rejects.toThrowError(AuthorizationError);
+    });
+
+    it('should not throw AuthorizationError when user unAuthorized', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-123'))
+        .resolves.not.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('verifyCommentId function', () => {
+    it('should throw NotFoundError when comment not available', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentId('comment-123', 'thread-123'))
+        .rejects.toThrowError(new NotFoundError('komentar tidak ditemukan'));
+    });
+
+    it('should throw NotFoundError when comment is deleted', async () => {
+      // Arrange
+
+      // add user comentator
+      await UsersTableTestHelper.addUser({
+        id: 'user-000',
+        username: 'comentator',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-000',
+        isDeleted: true, // comment is soft deleted
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentId('comment-123', 'thread-123'))
+        .rejects.toThrowError(new NotFoundError('komentar telah dihapus'));
+    });
+
+    it('should throw NotFoundError when comment is not found in thread', async () => {
+      // Arrange
+      // add user comentator
+      await UsersTableTestHelper.addUser({
+        id: 'user-000',
+        username: 'comentator',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-000',
+        isDeleted: false, // comment is soft deleted
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentId('comment-123', 'thread-000'))
+        .rejects.toThrowError(new NotFoundError('komentar tidak ditemukan'));
+    });
+
+    it('should not throw NotFoundError when comment available', async () => {
+      // Arrange
+      // add user comentator
+      await UsersTableTestHelper.addUser({
+        id: 'user-000',
+        username: 'comentator',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-000',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentId('comment-123', 'thread-123'))
+        .resolves.not.toThrowError(NotFoundError);
+    });
   });
 });
