@@ -105,7 +105,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       // Arrange
       const requestPayload = {
         content: 'comment-content',
-        owner: 123,
+        owner: 'user-123',
         threadId: 'thread-123',
       };
       const accessToken = await ServerTestHelper.getAccessToken({});

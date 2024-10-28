@@ -39,14 +39,14 @@ describe('AddReplyUseCase', () => {
       .mockImplementation(() => Promise.resolve());
 
     /**  creating use case instance */
-    const getReplyUseCase = new AddReplyUseCase({
+    const addReplyUseCase = new AddReplyUseCase({
       replyRepository: mockReplyRepository,
       commentRepository: mockCommentRepository,
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const addedReply = await getReplyUseCase.execute(useCasePayload);
+    const addedReply = await addReplyUseCase.execute(useCasePayload);
 
     // Assert
     expect(addedReply).toStrictEqual(expectedAddedReply);
@@ -58,6 +58,7 @@ describe('AddReplyUseCase', () => {
       commentId: useCasePayload.commentId,
     }));
 
-    expect(mockCommentRepository.verifyCommentId).toBeCalledWith(useCasePayload.commentId);
+    expect(mockCommentRepository.verifyCommentId)
+      .toBeCalledWith(useCasePayload.commentId, useCasePayload.threadId);
   });
 });

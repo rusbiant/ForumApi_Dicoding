@@ -1,4 +1,5 @@
 const AddReply = require('../../../Domains/replies/entities/AddReply');
+const AddedReply = require('../../../Domains/replies/entities/AddedReply');
 
 class AddReplyUseCase {
   constructor({ replyRepository, commentRepository, threadRepository }) {
@@ -9,9 +10,11 @@ class AddReplyUseCase {
 
   async execute(useCasePayload) {
     const addReply = new AddReply(useCasePayload);
-    await this._threadRepository.verifyThreadId(useCasePayload.threadId);
-    await this._commentRepository.verifyCommentId(useCasePayload.commentId);
-    return this._replyRepository.addReply(addReply);
+    const { threadId, commentId } = useCasePayload;
+    await this._threadRepository.verifyThreadId(threadId);
+    await this._commentRepository.verifyCommentId(commentId, threadId);
+    const addedReply = await this._replyRepository.addReply(addReply);
+    return new AddedReply(addedReply);
   }
 }
 
